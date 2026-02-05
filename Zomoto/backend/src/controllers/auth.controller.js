@@ -10,7 +10,7 @@ const registerUser = async (req, res) => {
 
   try {
     const isUserAlreadyExist = await userModel.findOne({ email });
-
+    
     if (isUserAlreadyExist) {
       return res.status(400).json({ message: "User already exist" });
     }
@@ -139,7 +139,7 @@ const loginFoodPartner = async (req, res) => {
     const foodPartner = await foodPartnerModel.findOne({ email });
 
     if (!foodPartner) {
-      res.status(400).json({ message: "Invalid email or password" });
+      return res.status(400).json({ message: "Invalid email or password" });
     }
 
     const isPasswordMatched = await bcrypt.compare(
