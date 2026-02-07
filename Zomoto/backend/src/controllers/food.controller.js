@@ -15,16 +15,19 @@ const createFood = async (request, response) => {
       request.file.path,
       `food-${uuidv4()}`,
     );
-    console.log(uploadResult);
 
     const newFood = new foodModel({
       name: request.body.name,
       description: request.body.description,
       video: uploadResult.url,
-      partnerId: request.foodPartner._id,
+      foodPartner: request.foodPartner._id,
     });
-    console.log(newFood);
     await newFood.save();
+
+    response.status(201).json({
+      message: "Food created successfully",
+      food: newFood,
+    });
   } catch (error) {
     if (request.file) fs.unlinkSync(request.file.path);
     response.status(500).json({
@@ -34,6 +37,16 @@ const createFood = async (request, response) => {
   }
 };
 
+const getFoodItems = async (request, response) => {
+  const foodItems = await foodModel.find({});
+
+  response.status(200).json({
+    message: "Food items fetched successfully",
+    foodItems: foodItems, 
+  });
+};
+
 module.exports = {
   createFood,
+  getFoodItems,
 };

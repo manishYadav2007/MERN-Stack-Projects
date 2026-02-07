@@ -5,19 +5,16 @@ const authMiddleware = require("../middlewares/auth.middleware");
 const multer = require("multer");
 const path = require("path");
 
-
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/");
-  }, 
+  },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname));
-  }
-})
+  },
+});
 
 const upload = multer({ storage: storage });
-
 
 router.post(
   "/",
@@ -25,4 +22,9 @@ router.post(
   upload.single("video"),
   foodController.createFood,
 );
+
+// Get /api/food/[protected]
+
+router.get("/", authMiddleware.authUserMiddleware, foodController.getFoodItems);
+
 module.exports = router;
