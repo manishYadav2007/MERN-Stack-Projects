@@ -1,10 +1,9 @@
 import express from "express";
+import { signUp } from "../controllers/auth.controller.js";
 
 const route = express.Router();
 
-route.get("/signup", (request, response) => {
-  response.send("Signup API Endpoint");
-});
+route.post("/signup", signUp);
 
 route.get("/login", (request, response) => {
   response.send("Login API Endpoint");
