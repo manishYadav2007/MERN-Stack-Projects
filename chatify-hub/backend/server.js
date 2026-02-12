@@ -23,7 +23,10 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
+app.get("/", (req, res) => {
+  res.send("API is Running Successfully");
+});
+
 app.listen(port, () => {
   console.log(`Server is running on port 3000`);
 });
-
