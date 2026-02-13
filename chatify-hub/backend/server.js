@@ -12,7 +12,6 @@ const __dirname = path.resolve();
 
 const port = process.env.PORT || 3000;
 
-
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
@@ -31,7 +30,13 @@ app.get("/", (req, res) => {
   res.send("API is Running Successfully");
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port 3000`);
-  connectDb();
-});
+connectDb()
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
+  })
+  .catch((error) => {
+    console.log(`Failed to connect to MongoDB: ${error}`);
+    process.exit(1);
+  });
