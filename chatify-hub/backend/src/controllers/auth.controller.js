@@ -1,8 +1,10 @@
+import { sendWelcomeEmail } from "../emails/emailHandlers.js";
 import { userModel } from "../models/user.model.js";
 import { generateToken } from "../lib/utils.js";
 import bcrypt from "bcrypt";
+import { ENV } from "../lib/env.js";
 
-export const signUp = async (request, response) => {
+ const signUp = async (request, response) => {
   const { fullName, email, password } = request.body;
 
   try {
@@ -29,8 +31,7 @@ export const signUp = async (request, response) => {
     if (user)
       return response.status(400).json({ message: "Email already exists" });
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = new userModel({
       fullName,
@@ -39,14 +40,26 @@ export const signUp = async (request, response) => {
     });
 
     if (newUser) {
-      generateToken(newUser._id, response);
-      await newUser.save();
+      const savedUser = await newUser.save();
+      generateToken(savedUser._id, response);
       response.status(201).json({
         _id: newUser._id,
         fullName: newUser.fullName,
         email: newUser.email,
         profilePic: newUser.profilePic,
       });
+
+      // send a welcome email
+
+      try {
+        await sendWelcomeEmail(
+          savedUser.email,
+          savedUser.fullName,
+          ENV.CLIENT_URL,
+        );
+      } catch (error) {
+        console.log(`Error sending welcome email: ${error}`); 
+      }
     } else {
       response.status(400).json({
         message: "Invalid user data",
@@ -59,3 +72,5 @@ export const signUp = async (request, response) => {
     });
   }
 };
+
+export { signUp };
