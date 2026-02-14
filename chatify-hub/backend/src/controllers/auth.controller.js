@@ -1,8 +1,10 @@
+import { sendWelcomeEmail } from "../emails/emailHandlers.js";
 import { userModel } from "../models/user.model.js";
 import { generateToken } from "../lib/utils.js";
 import bcrypt from "bcrypt";
+import { ENV } from "../lib/env.js";
 
-export const signUp = async (request, response) => {
+ const signUp = async (request, response) => {
   const { fullName, email, password } = request.body;
 
   try {
@@ -46,6 +48,18 @@ export const signUp = async (request, response) => {
         email: newUser.email,
         profilePic: newUser.profilePic,
       });
+
+      // send a welcome email
+
+      try {
+        await sendWelcomeEmail(
+          savedUser.email,
+          savedUser.fullName,
+          ENV.CLIENT_URL,
+        );
+      } catch (error) {
+        console.log(`Error sending welcome email: ${error}`); 
+      }
     } else {
       response.status(400).json({
         message: "Invalid user data",
@@ -58,3 +72,5 @@ export const signUp = async (request, response) => {
     });
   }
 };
+
+export { signUp };
