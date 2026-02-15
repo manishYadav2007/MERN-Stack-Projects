@@ -4,7 +4,7 @@ import { generateToken } from "../lib/utils.js";
 import bcrypt from "bcrypt";
 import { ENV } from "../lib/env.js";
 
- const signUp = async (request, response) => {
+const signUp = async (request, response) => {
   const { fullName, email, password } = request.body;
 
   try {
@@ -58,7 +58,7 @@ import { ENV } from "../lib/env.js";
           ENV.CLIENT_URL,
         );
       } catch (error) {
-        console.log(`Error sending welcome email: ${error}`); 
+        console.log(`Error sending welcome email: ${error}`);
       }
     } else {
       response.status(400).json({
@@ -73,4 +73,38 @@ import { ENV } from "../lib/env.js";
   }
 };
 
-export { signUp };
+const login = async (request, response) => {
+  const { password, email } = request.body;
+
+  try {
+    const user = await userModel.findOne({ email });
+    if (!user || !password)
+      return response.status(400).json({ message: "Invalid credentials" });
+
+    const isPasswordMatched = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordMatched)
+      return response.status(400).json({
+        message: "Invalid credentials",
+      });
+
+    generateToken(user._id, response);
+    response.status(200).json({
+      _id: user._id,
+      email: user.email,
+      fullName: user.fullName,
+      profilePic: user.profilePic,
+    });
+  } catch (error) {
+    console.error(`Error in login controller: ${error}`);
+    response.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+const logout = async (_, response) => {
+  response.cookie("jwt_token", null, { maxLimit: 0 });
+  response.status(200).json({ message: "Logged out successfully" });
+};
+
+export { signUp, login, logout };
