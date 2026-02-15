@@ -75,12 +75,15 @@ const signUp = async (request, response) => {
 
 const login = async (request, response) => {
   const { password, email } = request.body;
+  if (!email || !password)
+    return response
+      .status(400)
+      .json({ message: "Email and password required" });
 
   try {
     const user = await userModel.findOne({ email });
-    if (!user || !password)
+    if (!user)
       return response.status(400).json({ message: "Invalid credentials" });
-
     const isPasswordMatched = await bcrypt.compare(password, user.password);
 
     if (!isPasswordMatched)
@@ -103,7 +106,7 @@ const login = async (request, response) => {
   }
 };
 const logout = async (_, response) => {
-  response.cookie("jwt_token", null, { maxLimit: 0 });
+  response.cookie("jwt_token", "", { maxLimit: 0 });
   response.status(200).json({ message: "Logged out successfully" });
 };
 
