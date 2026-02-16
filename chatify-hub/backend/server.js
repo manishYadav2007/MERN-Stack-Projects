@@ -3,6 +3,7 @@ import authRoutes from "./src/routes/auth.route.js";
 import messageRoutes from "./src/routes/message.route.js";
 import path from "path";
 import { ENV } from "./src/lib/env.js";
+import cookieParser from "cookie-parser";
 import { connectDb } from "./src/lib/db.js";
 
 const app = express();
@@ -11,6 +12,7 @@ const __dirname = path.resolve();
 
 const port = ENV.PORT || 3000;
 
+app.use(cookieParser());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
