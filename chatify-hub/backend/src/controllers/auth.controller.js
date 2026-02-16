@@ -131,7 +131,7 @@ const updateProfile = async (request, response) => {
       updatedUser: updatedUser,
     });
   } catch (error) {
-    console.error(`Error in updateProfile controller: ${error}`);
+    console.error(`Error in update profile controller: ${error}`);
     response.status(500).json({
       message: "Internal server error",
     });
