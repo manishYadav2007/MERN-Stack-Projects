@@ -1,4 +1,4 @@
-import express, { request } from "express";
+import express from "express";
 import {
   signUp,
   login,
@@ -6,11 +6,13 @@ import {
   updateProfile,
 } from "../controllers/auth.controller.js";
 import { authRouteMiddleware } from "../middleware/auth.middleware.js";
+import { arcjetMiddleware } from "../middleware/arcjet.middleware.js";
 
 const route = express.Router();
 
-route.post("/signup", signUp);
+route.use(arcjetMiddleware);
 
+route.post("/signup", signUp);
 route.post("/login", login);
 
 route.post("/logout", logout);
