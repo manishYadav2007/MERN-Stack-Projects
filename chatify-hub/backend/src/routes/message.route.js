@@ -1,9 +1,20 @@
 import express from "express";
+import {
+  getAllContacts,
+  getMessagesByUserId,
+  sendMessage,
+  getChatPartners,
+} from "../controllers/message.controller.js";
+import { authRouteMiddleware } from "../middleware/auth.middleware.js";
+import { arcjetMiddleware } from "../middleware/arcjet.middleware.js";
 
-const route = express.Router();
+const router = express.Router();
 
-route.get("/send", (request, response) => {
-  response.send("Send Message API Endpoint");
-});
+router.use(arcjetMiddleware, authRouteMiddleware);
 
-export default route;
+router.get("/contacts", getAllContacts);
+router.get("/chats", getChatPartners);
+router.get("/:id", getMessagesByUserId);
+router.post("/send/:id", sendMessage);
+
+export default router;
