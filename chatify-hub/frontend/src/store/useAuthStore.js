@@ -6,7 +6,7 @@ export const useAuthStore = create((set) => ({
   authUser: null,
   isCheckingAuth: true,
   isSignUp: false,
-
+  isLogin: false,
   checkAuth: async () => {
     try {
       const response = await axiosInstance.get("/auth/verify");
@@ -32,6 +32,39 @@ export const useAuthStore = create((set) => ({
       console.error(`SignUp Error: ${error}`);
     } finally {
       set({ isSignUp: false });
+    }
+  },
+
+  login: async (data) => {
+    set({ isLogin: true });
+    try {
+      const response = await axiosInstance.post("/auth/login", data);
+      set({ authUser: response.data });
+      toast.success("Login successful!");
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "Network Error: Unable to login";
+
+      toast.error(errorMessage);
+      console.error(`Login Error: ${error}`);
+    } finally {
+      set({ isLogin: false });
+    }
+  },
+
+  logout: async () => {
+    set({ isLoggedOut: true });
+    try {
+      await axiosInstance.post("/auth/logout");
+      set({ authUser: null });
+      toast.success("Logged out successful!");
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "Network Error: Unable to logout";
+      toast.error(errorMessage);
+      console.log(`Logout Error: ${error}`);
+    } finally {
+      set({ isLoggedOut: false });
     }
   },
 }));
