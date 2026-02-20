@@ -5,6 +5,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Bree+Serif&family=Caveat:wght@400;700&family=Lobster&family=Monoton&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Playfair+Display+SC:ital,wght@0,400;0,700;1,700&family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+Pro:ital,wght@0,400;0,700;1,700&family=Work+Sans:ital,wght@0,400;0,700;1,700&display=swap");
 
+@property --border-angle {
+  inherits: false;
+  initial-value: 0deg;
+  syntax: "<angle>";
+}
+
 * {
   font-family: "Poppins", sans-serif, Helvetica;
 }
@@ -21,4 +27,30 @@ body {
 img {
   max-width: 100%;
   display: block;
+}
+
+.input {
+  @apply w-full bg-slate-800/50 border border-slate-700 rounded-lg py-2 pl-10 pr-4 text-slate-200 placeholder-slate-400 focus:ring-2 focus:ring-cyan-500 focus:border-transparent;
+}
+
+.signup-input-label {
+  @apply block text-sm font-medium text-slate-300 mb-2;
+}
+
+.auth-input-icon {
+  @apply absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 size-5;
+}
+
+.auth-badge {
+  @apply inline-flex items-center px-3 py-1 text-xs font-medium rounded-full bg-cyan-500/20 text-cyan-300;
+}
+
+.submit-form-btn {
+  @apply w-full bg-cyan-500 text-white rounded-lg py-2.5 font-medium
+  hover:bg-cyan-600 focus:ring-2 focus:ring-cyan-500;
+}
+
+.auth-redirect-link {
+  @apply px-4 py-2 inline-block bg-cyan-500/10 rounded-lg text-cyan-400
+  hover:text-cyan-500 text-sm transition-colors;
 }
