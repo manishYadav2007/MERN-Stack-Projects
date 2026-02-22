@@ -1,4 +1,5 @@
 import express from "express";
+import helmet from "helmet";
 import cors from "cors";
 import authRoutes from "./src/routes/auth.route.js";
 import messageRoutes from "./src/routes/message.route.js";
@@ -8,6 +9,7 @@ import cookieParser from "cookie-parser";
 import { connectDb } from "./src/lib/db.js";
 
 const app = express();
+app.use(helmet());
 const __dirname = path.resolve();
 
 const port = ENV.PORT || 3000;
