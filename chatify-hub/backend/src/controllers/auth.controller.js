@@ -82,7 +82,7 @@ const login = async (request, response) => {
       .json({ message: "Email and password required" });
 
   try {
-    const user = await userModel.findOne({ email });
+    const user = await userModel.findOne({ email: { $eq: email } });
     if (!user)
       return response.status(400).json({ message: "Invalid credentials" });
     const isPasswordMatched = await bcrypt.compare(password, user.password);
