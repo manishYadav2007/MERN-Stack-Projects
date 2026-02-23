@@ -27,7 +27,6 @@ export const authRouteMiddleware = async (request, response, next) => {
     next();
   } catch (error) {
     console.log(`Error in ProtectedRoute middleware: ${error}`);
-    response.status(500).json({ message: "Internal Server Error" });
-    
+    return response.status(401).json({ message: "Unauthorized - Token verification failed" });
   }
 };
