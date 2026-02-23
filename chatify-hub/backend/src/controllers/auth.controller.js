@@ -3,8 +3,8 @@ import { userModel } from "../models/user.model.js";
 import { generateToken } from "../lib/utils.js";
 import bcrypt from "bcrypt";
 import { ENV } from "../lib/env.js";
+// import { cloudinaryConfig } from "../services/cloudinary.service.js";
 import { cloudinaryConfig } from "../services/cloudinary.service.js";
-
 const signUp = async (request, response) => {
   const { fullName, email, password } = request.body;
 
@@ -107,7 +107,7 @@ const login = async (request, response) => {
   }
 };
 const logout = async (_, response) => {
-  response.cookie("jwt_token", "", { maxLimit: 0 });
+  response.cookie("jwt_token", "", { maxAge: 0 });
   response.status(200).json({ message: "Logged out successfully" });
 };
 
@@ -116,7 +116,16 @@ const updateProfile = async (request, response) => {
     const { profilePic } = request.body;
     const userId = request.user._id;
 
-    const uploadImage = await cloudinaryConfig.uploader.upload(profilePic);
+    if (!profilePic) {
+      return response.status(400).json({
+        message: "Profile picture is required",
+      });
+    }
+
+    const uploadImage = await cloudinaryConfig.uploader.upload(profilePic, {
+      resource_type: "auto",
+      folder: "chatify/profiles",
+    });
 
     const updatedUser = await userModel
       .findByIdAndUpdate(
@@ -131,9 +140,11 @@ const updateProfile = async (request, response) => {
       updatedUser: updatedUser,
     });
   } catch (error) {
-    console.error(`Error in update profile controller: ${error}`);
+    console.error(`Error in update profile controller: ${error.message}`);
+    console.error(`Full error: ${JSON.stringify(error)}`);
     response.status(500).json({
-      message: "Internal server error",
+      message: "Failed to update profile picture",
+      error: error.message,
     });
   }
 };

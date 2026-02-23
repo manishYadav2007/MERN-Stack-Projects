@@ -67,4 +67,22 @@ export const useAuthStore = create((set) => ({
       set({ isLoggedOut: false });
     }
   },
+
+  updateProfile: async (formData) => {
+    set({ isUpdatingProfile: true });
+    console.log("Sending data:", formData);
+    try {
+      const response = await axiosInstance.put("/auth/update-profile", formData);
+      set({ authUser: response.data.updatedUser });
+      toast.success("Profile updated successfully!");
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message ||
+        "Network Error: Unable to update profile";
+      toast.error(errorMessage);
+      console.error(`Profile Update Error: ${error}`);
+    } finally {
+      set({ isUpdatingProfile: false });
+    }
+  },
 }));

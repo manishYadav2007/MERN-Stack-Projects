@@ -10,6 +10,7 @@ export const useChatStore = create((set, get) => ({
   selectedUser: null,
   isUsersLoading: false,
   isMessagesLoading: false,
+  isImageUploading: false,
   isSoundEnabled: JSON.parse(localStorage.getItem("isSoundEnabled")) === true,
 
   // actions
@@ -40,7 +41,7 @@ export const useChatStore = create((set, get) => ({
   },
 
   getChatPartners: async () => {
-    set({ isUsersLoading: true });
+    set({ isImageUploading: true });
     try {
       const response = await axiosInstance.get("messages/chats");
       set({ chats: response.data });
@@ -51,7 +52,7 @@ export const useChatStore = create((set, get) => ({
       toast.error(errorMessage);
       console.error(`Error fetching chat partners: ${errorMessage}`);
     } finally {
-      set({ isUsersLoading: false });
+      set({ isImageUploading: false });
     }
   },
 }));

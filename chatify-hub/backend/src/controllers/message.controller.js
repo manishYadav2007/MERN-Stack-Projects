@@ -82,7 +82,7 @@ export const sendMessage = async (req, res) => {
 
 export const getChatPartners = async (req, res) => {
   try {
-    const loggedInUserId = req.user_id;
+    const loggedInUserId = req.user._id;
 
     const messages = await messageModel.find({
       $or: [{ senderId: loggedInUserId }, { receiverId: loggedInUserId }],
@@ -91,7 +91,7 @@ export const getChatPartners = async (req, res) => {
     const chatPartnersIds = [
       ...new Set(
         messages.map((message) =>
-          msg.senderId.toString() === loggedInUserId.toString()
+          message.senderId.toString() === loggedInUserId.toString()
             ? message.receiverId.toString()
             : message.senderId.toString(),
         ),

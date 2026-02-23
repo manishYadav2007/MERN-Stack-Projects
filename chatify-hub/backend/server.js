@@ -13,11 +13,11 @@ const __dirname = path.resolve();
 const port = ENV.PORT || 3000;
 
 app.use(cookieParser());
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
 app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
 
 app.use("/api/auth", authRoutes);
-app.use("/api/message", messageRoutes);
+app.use("/api/messages", messageRoutes);
 
 // Make ready for deployment
 if (ENV.NODE_ENV === "production") {
