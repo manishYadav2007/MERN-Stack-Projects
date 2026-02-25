@@ -1,3 +1,4 @@
+
 import React from "react";
 import ProfileHeader from "../components/ProfileHeader";
 import ActiveTab from "../components/ActiveTab";
@@ -6,8 +7,8 @@ import ContactLists from "../components/ContactLists";
 import { useChatStore } from "../store/useChatStore";
 import AnimatedBorderContainer from "../components/AnimatedBorderContainer";
 import ChatWindow from "../components/ChatWindow";
-import NoConversionPlaceholder from "../components/NoConversionPlaceholder";
-
+// import NoConversionPlaceholder from "../components/NoConversionPlaceholder";
+import NoConversationPlaceholder from "../components/NoConversationPlaceholder";
 const ChatPage = () => {
   const { activeTab, selectedUser } = useChatStore();
   return (
@@ -22,7 +23,7 @@ const ChatPage = () => {
         </div>
 
         <div className="flex-1 flex flex-col bg-slate-900/50 backdrop-blur-sm">
-          {selectedUser ? <ChatWindow /> : <NoConversionPlaceholder />}
+          {selectedUser ? <ChatWindow /> : <NoConversationPlaceholder />}
         </div>
       </AnimatedBorderContainer>
     </div>

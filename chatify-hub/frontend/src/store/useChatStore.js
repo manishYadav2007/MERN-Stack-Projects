@@ -19,7 +19,6 @@ export const useChatStore = create((set, get) => ({
     localStorage.setItem("isSoundEnabled", JSON.stringify(isSoundEnabled));
     set({ isSoundEnabled });
   },
-  
 
   setActiveTab: (tab) => set({ activeTab: tab }),
   setSelectedUser: (user) => set({ selectedUser: user }),
@@ -53,6 +52,23 @@ export const useChatStore = create((set, get) => ({
       console.error(`Error fetching chat partners: ${errorMessage}`);
     } finally {
       set({ isImageUploading: false });
+    }
+  },
+
+  getMessagesByUserId: async (userId) => {
+    set({ isMessagesLoading: true });
+    try {
+      const response = await axiosInstance.get(`messages/${userId}`);
+      console.log(response.data);
+      set({ messages: response.data });
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.messages ||
+        "Network Error: Unable to fetch messages";
+      toast.error(errorMessage);
+      console.error(`Error fetching messages: ${errorMessage}`);
+    } finally {
+      set({ isMessagesLoading: false });
     }
   },
 }));
