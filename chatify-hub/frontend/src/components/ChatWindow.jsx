@@ -2,17 +2,24 @@ import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useAuthStore";
 import ChatWindowHeader from "./ChatWindowHeader";
 import NoChatHistoryContainer from "./NoChatHistoryContainer";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import MessageInput from "./MessageInput";
 import MessagesLoadingSkeleton from "./MessagesLoadingSkeleton";
 const ChatWindow = () => {
   const { selectedUser, getMessagesByUserId, isMessagesLoading, messages } =
     useChatStore();
   const { authUser } = useAuthStore();
+  const messagesEndRef = useRef(null);
 
   useEffect(() => {
     getMessagesByUserId(selectedUser?._id);
   }, [selectedUser, getMessagesByUserId]);
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   return (
     <>
@@ -27,6 +34,7 @@ const ChatWindow = () => {
                 isOwnMessage={message.senderId === authUser._id}
               />
             ))}
+            <div ref={messagesEndRef} />
           </ul>
         ) : isMessagesLoading ? (
           <MessagesLoadingSkeleton />
