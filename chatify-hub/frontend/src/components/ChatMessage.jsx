@@ -17,7 +17,7 @@ const ChatMessage = (props) => {
       >
         {image && (
           <img src={image} alt="" className="rounded-lg h-48 object-cover" />
-        )}{" "}
+        )}
         {text && <p className="mt-2">{text}</p>}
         <p className="text-xs mt-1 opacity-75 flex items-center gap-1">
           {new Date(createdAt).toLocaleTimeString(undefined, {
