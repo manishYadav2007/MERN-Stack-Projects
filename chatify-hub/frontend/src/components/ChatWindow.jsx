@@ -6,13 +6,23 @@ import { useEffect, useRef } from "react";
 import MessageInput from "./MessageInput";
 import MessagesLoadingSkeleton from "./MessagesLoadingSkeleton";
 const ChatWindow = () => {
-  const { selectedUser, getMessagesByUserId, isMessagesLoading, messages } =
-    useChatStore();
+  const {
+    selectedUser,
+    getMessagesByUserId,
+    isMessagesLoading,
+    messages,
+    subscribeToMessages,
+    unSubscribeToMessages,
+  } = useChatStore();
   const { authUser } = useAuthStore();
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
     getMessagesByUserId(selectedUser?._id);
+    subscribeToMessages();
+    return () => {
+      unSubscribeToMessages();
+    };
   }, [selectedUser, getMessagesByUserId]);
 
   useEffect(() => {
