@@ -2,6 +2,7 @@ import { userModel } from "../models/user.model.js";
 
 import { messageModel } from "../models/message.model.js";
 import { cloudinaryConfig } from "../services/cloudinary.service.js";
+import { getReceiverSocketId, io } from "../lib/socket.js";
 
 export const getAllContacts = async (request, response) => {
   try {
@@ -74,6 +75,12 @@ export const sendMessage = async (req, res) => {
     });
 
     await newMessage.save();
+
+    const receiverSocketId = getReceiverSocketId(receiverId);
+
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMessage", newMessage);
+    }
   } catch (error) {
     console.log(`Error in sendMessage: ${error}`);
     res.status(500).json({ error: "Internal Server Error" });

@@ -17,6 +17,8 @@ const io = new Server(server, {
 
 io.use(createSocketAuthMiddleware);
 
+export const getReceiverSocketId = (userId) => userSockets[userId];
+
 // store online users
 const userSockets = {};
 
