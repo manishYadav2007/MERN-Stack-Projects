@@ -4,6 +4,11 @@ import { ENV } from "../lib/env.js";
 
 export const createSocketAuthMiddleware = async (socket, next) => {
   try {
+    const cookieHeader = socket.handshake.headers.cookie;
+    if (!cookieHeader) {
+      console.log("Socket connection rejected: No cookie header");
+      return next(new Error("Unauthorized - No Cookie Header"));
+    }
     const token = socket.handshake.headers.cookie
       ?.split("; ")
       .find((row) => row.startsWith("jwt_token="))
@@ -15,7 +20,7 @@ export const createSocketAuthMiddleware = async (socket, next) => {
     }
 
     const decoded = jwt.verify(token, ENV.JWT_SECRET);
-    if (!decoded) {
+    if (!decoded || !decoded.userId) {
       console.log("Socket connection rejected: Invalid token");
       return next(new Error("Unauthorized - Invalid Token"));
     }
