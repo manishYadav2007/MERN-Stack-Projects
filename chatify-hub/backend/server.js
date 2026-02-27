@@ -18,18 +18,18 @@ app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
-// Make ready for deployment
+
 if (ENV.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-  app.get("*", (_, res) => {
-    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../frontend", "dist", "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.send("API is Running Successfully in Local Environment");
   });
 }
-
-app.get("/", (req, res) => {
-  res.send("API is Running Successfully");
-});
 
 connectDb()
   .then(() => {
