@@ -6,8 +6,7 @@ import path from "path";
 import { ENV } from "./src/lib/env.js";
 import cookieParser from "cookie-parser";
 import { connectDb } from "./src/lib/db.js";
-
-const app = express();
+import { app, server } from "./src/lib/socket.js";
 const __dirname = path.resolve();
 
 const port = ENV.PORT || 3000;
@@ -34,7 +33,7 @@ app.get("/", (req, res) => {
 
 connectDb()
   .then(() => {
-    app.listen(port, () => {
+    server.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
   })
