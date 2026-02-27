@@ -1,5 +1,4 @@
 import { MessageCircleIcon } from "lucide-react";
-import React from "react";
 
 const NoChatHistoryContainer = ({name}) => {
   return (

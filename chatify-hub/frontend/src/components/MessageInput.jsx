@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 // import useChatStore from "../store/useChatStore";
 import { useChatStore } from "../store/useChatStore";
 import useKeyboardKeyStroke from "../hooks/useKeyboardKeyStroke";

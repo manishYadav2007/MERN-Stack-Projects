@@ -1,9 +1,11 @@
-import React from "react";
+import { useAuthStore } from "../store/useAuthStore";
 import { useChatStore } from "../store/useChatStore";
 
 const ChatsItem = (props) => {
   const { chats, getChatPartners, isUsersLoading, setSelectedUser } =
     useChatStore();
+
+  const { onlineUsers } = useAuthStore();
 
   const { chat } = props;
   console.log(chat);
@@ -14,7 +16,9 @@ const ChatsItem = (props) => {
       onClick={() => setSelectedUser(chat)}
     >
       <div className="flex items-center gap-3">
-        <div className="avatar-online">
+        <div
+          className={`avatar ${onlineUsers.includes(chat._id) ? "avatar-online" : "avatar-offline"}`}
+        >
           <div className="size-12 rounded-full">
             <img
               src={
