@@ -18,18 +18,13 @@ app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
-// Make ready for deployment
-// Make ready for deployment
 if (ENV.NODE_ENV === "production") {
-  // Frontend ka static folder serve karein
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-  // Kisi bhi route ke liye React ka index.html bhejein
   app.get("*", (req, res) => {
     res.sendFile(path.resolve(__dirname, "../frontend", "dist", "index.html"));
   });
 } else {
-  // Yeh sirf Local development me dikhega
   app.get("/", (req, res) => {
     res.send("API is Running Successfully in Local Environment");
   });
