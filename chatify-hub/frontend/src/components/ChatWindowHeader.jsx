@@ -23,25 +23,27 @@ const ChatWindowHeader = () => {
 
   return (
     <div
-      className="flex justify-between items-center bg-slate-800/50 border-b
-   border-slate-700/50 max-h-[84px] px-6 flex-1"
+      className="flex justify-between items-center bg-slate-800/50 border-b border-slate-700/50 h-20 px-6"
     >
-      <div className="flex items-center space-x-3">
+      {/* wrapper to keep avatar/name on left and button on right */}
+      <div className="flex justify-between items-center w-full">
         <div
-          className={`avatar ${isOnline ? "avatar-online" : "avatar-offline"}`}
+          className={`flex items-center gap-3 ${isOnline ? "avatar online" : "avatar offline"}`}
         >
-          <div className="w-12 rounded-full">
+          {/* make avatar a fixed square using utility classes */}
+          <div className="size-14 rounded-full overflow-hidden">
             <img
               src={
                 selectedUser.profilePic ||
                 "https://github.com/burakorkmez/chatify/blob/master/frontend/public/avatar.png?raw=true"
               }
+              className="size-full object-cover"
               alt={selectedUser.fullName}
             />
           </div>
 
           <div>
-            <h3 className="text-slate-200 font-medium">
+            <h3 className="text-slate-200 font-medium truncate max-w-[150px]">
               {selectedUser.fullName}
             </h3>
             <p className="text-slate-400 text-sm">
@@ -49,6 +51,8 @@ const ChatWindowHeader = () => {
             </p>
           </div>
         </div>
+
+        {/* close button stays rightmost */}
         <button onClick={() => setSelectedUser(null)}>
           <XIcon className="w-5 h-5 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer" />
         </button>
