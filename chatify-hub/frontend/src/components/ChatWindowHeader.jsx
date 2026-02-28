@@ -7,7 +7,7 @@ const ChatWindowHeader = () => {
   const { selectedUser, setSelectedUser } = useChatStore();
   const { onlineUsers } = useAuthStore();
 
-  const isOnline = onlineUsers.includes(selectedUser._id);
+  const isOnline = selectedUser ? onlineUsers.includes(selectedUser._id) : false;
   console.log(isOnline);
 
   useEffect(() => {
@@ -27,21 +27,30 @@ const ChatWindowHeader = () => {
     >
       {/* wrapper to keep avatar/name on left and button on right */}
       <div className="flex justify-between items-center w-full">
-        <div
-          className={`flex items-center gap-3 ${isOnline ? "avatar online" : "avatar offline"}`}
-        >
-          {/* make avatar a fixed square using utility classes */}
-          <div className="size-14 rounded-full overflow-hidden">
-            <img
-              src={
-                selectedUser.profilePic ||
-                "https://github.com/burakorkmez/chatify/blob/master/frontend/public/avatar.png?raw=true"
-              }
-              className="size-full object-cover"
-              alt={selectedUser.fullName}
-            />
+        <div className="flex items-center gap-3">
+          {/* avatar component with online/offline indicator */}
+          <div className="avatar">
+            <div className="relative">
+              <div className="size-14 rounded-full overflow-hidden">
+                <img
+                  src={
+                    selectedUser.profilePic ||
+                    "https://github.com/burakorkmez/chatify/blob/master/frontend/public/avatar.png?raw=true"
+                  }
+                  className="size-full object-cover"
+                  alt={selectedUser.fullName}
+                />
+              </div>
+
+              <span
+                className={`absolute -top-1 -right-1 w-3 h-3 rounded-full ring-2 ring-slate-800 ${
+                  isOnline ? "bg-green-400" : "bg-black"
+                }`}
+              />
+            </div>
           </div>
 
+          {/* user info */}
           <div>
             <h3 className="text-slate-200 font-medium truncate max-w-[150px]">
               {selectedUser.fullName}

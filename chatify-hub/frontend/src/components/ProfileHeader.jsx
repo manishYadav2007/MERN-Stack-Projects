@@ -8,7 +8,8 @@ const mouseClickSound = new Audio("/sounds/mouse-click.mp3");
 
 const ProfileHeader = () => {
   const { isSoundEnabled, toggleSound , isImageUploading} = useChatStore();
-  const { authUser, logout, updateProfile } = useAuthStore();
+  const { authUser, logout, updateProfile, onlineUsers } = useAuthStore();
+  const isOnline = onlineUsers.includes(authUser?._id);
   const [selectedImage, setSelectedImage] = useState(null);
 
   const fileInputRef = useRef(null);
@@ -32,20 +33,31 @@ const ProfileHeader = () => {
       <div className="p-6 border-b border-slate-700/50">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="avatar online">
+            <div className="avatar">
               <button
                 className="size-14 rounded-full overflow-hidden relative group"
                 onClick={() => fileInputRef.current.click()}
               >
-                <img
-                  src={
-                    selectedImage ||
-                    authUser?.profilePic ||
-                    "https://github.com/burakorkmez/chatify/blob/master/frontend/public/avatar.png?raw=true"
-                  }
-                  alt="User image"
-                  className="size-full object-cover"
-                />
+                <div className="relative">
+                  <div className="size-14 rounded-full overflow-hidden">
+                    <img
+                      src={
+                        selectedImage ||
+                        authUser?.profilePic ||
+                        "https://github.com/burakorkmez/chatify/blob/master/frontend/public/avatar.png?raw=true"
+                      }
+                      alt="User image"
+                      className="size-full object-cover"
+                    />
+                  </div>
+
+                  <span
+                    className={`absolute -top-1 -right-1 w-3 h-3 rounded-full ring-2 ring-slate-800 ${
+                      isOnline ? "bg-green-400 z-10" : "bg-black z-10"
+                    }`}
+                  />
+                </div>
+
                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                   <span className="text-white text-xs">Change</span>
                 </div>
@@ -65,7 +77,7 @@ const ProfileHeader = () => {
                 {authUser.fullName}
               </h3>
 
-              <p className="text-slate-400 text-xs">Online</p>
+              <p className="text-slate-400 text-xs">{isOnline ? "Online" : "Offline"}</p>
             </div>
           </div>
           <div className="flex gap-4 items-center">
