@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 // import useChatStore from "../store/useChatStore";
 import { useChatStore } from "../store/useChatStore";
 import useKeyboardKeyStroke from "../hooks/useKeyboardKeyStroke";
+import { XIcon, ImageIcon, SendIcon } from "lucide-react";
 const MessageInput = () => {
   const { playRandomKeyStrokeSound } = useKeyboardKeyStroke();
   const [text, setText] = useState("");
