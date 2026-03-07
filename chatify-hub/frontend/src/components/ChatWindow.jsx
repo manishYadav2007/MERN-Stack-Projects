@@ -6,7 +6,6 @@ import NoChatHistoryContainer from "./NoChatHistoryContainer";
 import { useEffect, useRef } from "react";
 import MessageInput from "./MessageInput";
 import MessagesLoadingSkeleton from "./MessagesLoadingSkeleton";
-import ChatMessage from "./ChatMessage";
 const ChatWindow = () => {
   const {
     selectedUser,
